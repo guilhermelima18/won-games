@@ -51,4 +51,17 @@ describe('<Button />', () => {
     expect(screen.getByText(/Won Games/i)).toBeInTheDocument()
     expect(screen.getByTestId('icon')).toBeInTheDocument()
   })
+
+  it('should render button as a link', () => {
+    renderWithTheme(
+      <Button as="a" href="/link">
+        Won Games
+      </Button>
+    )
+
+    expect(screen.getByRole('link', { name: /won games/i })).toHaveAttribute(
+      'href',
+      '/link'
+    )
+  })
 })
