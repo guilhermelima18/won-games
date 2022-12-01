@@ -1,6 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
+import { ReactNode } from 'react'
 import { Button } from 'components/Button'
-import Image from 'next/image'
-import { AddShoppingCart, FavoriteBorder } from 'styled-icons/material-outlined'
+import { Ribbon, RibbonColors, RibbonSizes } from 'components/Ribbon'
+import {
+  AddShoppingCart,
+  FavoriteBorder,
+  Favorite
+} from 'styled-icons/material-outlined'
 import {
   Wrapper,
   ImageBox,
@@ -9,7 +15,8 @@ import {
   Developer,
   FavButton,
   BuyBox,
-  Price
+  Price,
+  Content
 } from './styles'
 
 export type GameCardProps = {
@@ -17,28 +24,57 @@ export type GameCardProps = {
   developer: string
   img: string
   price: string
+  promotionalPrice?: string
+  favorite?: boolean
+  ribbon?: ReactNode
+  ribbonSize?: RibbonSizes
+  ribbonColor?: RibbonColors
+  onFav?: () => void
 }
 
-export const GameCard = ({ title, developer, img, price }: GameCardProps) => {
+export const GameCard = ({
+  title,
+  developer,
+  img,
+  price,
+  promotionalPrice,
+  favorite = false,
+  ribbon,
+  ribbonColor,
+  ribbonSize,
+  onFav
+}: GameCardProps) => {
   return (
     <Wrapper>
+      {!!ribbon && (
+        <Ribbon color={ribbonColor} size={ribbonSize}>
+          {ribbon}
+        </Ribbon>
+      )}
       <ImageBox>
-        <Image width={100} height={100} src={img} alt={title} />
+        <img src={img} alt={title} />
       </ImageBox>
 
-      <Info>
-        <Title>{title}</Title>
-        <Developer>{developer}</Developer>
-      </Info>
+      <Content>
+        <Info>
+          <Title>{title}</Title>
+          <Developer>{developer}</Developer>
+        </Info>
 
-      <FavButton role="button">
-        <FavoriteBorder aria-label="Add to Wishlist" />
-      </FavButton>
+        <FavButton role="button" onClick={onFav}>
+          {favorite ? (
+            <Favorite aria-label="Remove from Wishlist" />
+          ) : (
+            <FavoriteBorder aria-label="Add to Wishlist" />
+          )}
+        </FavButton>
 
-      <BuyBox>
-        <Price>{price}</Price>
-        <Button icon={<AddShoppingCart />} size="small" />
-      </BuyBox>
+        <BuyBox>
+          {!!promotionalPrice && <Price isPromotional>{price}</Price>}
+          <Price>{promotionalPrice || price}</Price>
+          <Button icon={<AddShoppingCart />} size="small" />
+        </BuyBox>
+      </Content>
     </Wrapper>
   )
 }

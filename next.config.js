@@ -8,6 +8,15 @@ module.exports = withPWA({
     // Enables the styled-components SWC transform
     styledComponents: true
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com'
+      }
+    ],
+    minimumCacheTTL: 1500000
+  },
   pwa: {
     dest: 'public',
     disable: !isProd
